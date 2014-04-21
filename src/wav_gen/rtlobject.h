@@ -21,38 +21,36 @@
 #include <list>
 #include <map>
 #include <boost/function.hpp>
+#include <boost/noncopyable.hpp>
+//#include <boost/any.hpp>
 
-class RtlObject{
+class RtlObject :  public boost::noncopyable{
   public:
-	RtlObject(String& name,int width=1){
-		shortName=name;
-		val=new unsigned char [1+width/sizeof(unsigned char);
+	RtlObject(String& name){
+		shortName_=name;
 				
 	}
 	~RtlObject(){
 	}
 
-	typedef boost::function<void(std::map<String,RtlObject*>&)> ObjCallback;
-	void update(){
-		cb_();
-	}
+	typedef boost::function<void()> ObjCallback;
+
+	void update(){cb_();}
 	
-	void addLoad(ObjCallback cb){
-		cb_=cb;
-	}
+	void addLoad(ObjCallback cb){cb_=cb;}
 
-	unsigned char getVal(int bitNum){
-		return  ((val[bitNum/sizeof(unsigned char)])>>\
-			(bitNum%sizeof(unsigned char)))&0x1;
-	}
-
+	bool getVal(){return val_;}
+	
+	virtual bool operator=(bool val){val_=val;}
+	virtual	bool operator=(RtlObject &obj){val_=obj->getVal;}
+	
   private:
-	std::list<RtlObject*> loadList_;	
-	boost::shared_array<unsigned char> val; //depend on object width
+	std::list<RtlObject*> loadList_;
+	bool val_;	
 	ObjCallback cb_;
-		
-	String shortName;//signal name
+	String shortName_;//signal name
 };
+typedef boost::shared_ptr<RtlObject> RtlObjectPtr;
 
 /*for simplify, just make a totally new class of clock*/
 class ClkObject{

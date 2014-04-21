@@ -17,10 +17,10 @@
  */
 #include "common.h"
 #include "rtlobject.h"
-#include "rtlloop.h"
+//#include "rtlloop.h"
 
 using namespace std;
-typedef boost::shared_ptr<RtlObject> RtlObjectPtr;
+
 
 struct AlwaysModule{
 	AlwaysModule(ClkObject& clk){
@@ -32,16 +32,16 @@ struct AlwaysModule{
 	//output
 	RtlObject A;
 	RtlObject C;
-		void func()
+	void func()
 	{
-		if(reset){
+		if(reset.getVal()){
 			A=0;
 			B=0;
 			C=0;
 		}
 		else{
 			A = B;
-			if(B)	
+			if(B.getVal())	
 				C=A;
 		}
 	}
@@ -70,9 +70,9 @@ int main(int argc,char** argv)
 
 	ClkObject clk(string("test_clk"),100);
 	AlwaysModule md;
-	RtlObject B("test_b",1);
-	RtlObject reset("test_reset",1);
-	md.B=&B;
+	RtlObject B("test_b");
+	RtlObject reset("test_reset");
+	md.B=B.ptr;
 
 
 
