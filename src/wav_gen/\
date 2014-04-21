@@ -1,0 +1,90 @@
+/*
+ * =====================================================================================
+ *
+ *       Filename:  rtlobject.h
+ *
+ *    Description:  
+ *
+ *        Version:  1.0
+ *        Created:  21/04/14 05:41:13
+ *       Revision:  none
+ *       Compiler:  gcc
+ *
+ *         Author:  Tyroun (), 
+ *   Organization:  Verisilicon
+ *
+ * =====================================================================================
+ */
+#ifndef __rtlobject_H__
+#define __rtlobject_H__
+#include "common.h"
+#include <list>
+#include <map>
+#include <boost/function.hpp>
+
+class RtlObject{
+  public:
+	RtlObject(String& name,int width){
+		
+	}
+	~RtlObject(){
+	}
+
+	typedef boost::function<void(std::map<String,RtlObject*>&)> ObjCallback;
+	void update(){
+		cb();
+	}
+	
+	void addLoad(RtlObject *load){
+		loadList_.push_back(load);
+	}
+
+	unsigned char getVal(int bitNum){
+		if()
+	}
+
+  private:
+	std::list<RtlObject*> loadList_;	
+	char *val; //depend on object width
+	ObjCallback cb;
+		
+	String shortName;//signal name
+};
+
+/*for simplify, just make a totally new class of clock*/
+class ClkObject{
+  public:
+	ClkObject(String &name, int step):
+		step_(step),
+		name_(name)
+	{
+	
+	}
+	~ClkObject();
+
+	void setReset(RtlObject* reset,LevelType &type ){
+		reset_=reset;
+		type_=type;	
+	}
+
+	void update(int step){
+		if((step/step_)%2){
+			val_=0;
+		}	
+		else
+	}
+
+
+  private:
+	int step_;
+	LevelType type_;
+	RtlObject *reset_;
+	std::list<RtlObject*> posLoadList_;
+	std::list<RtlObject*> negLoadList_;
+	unsigned char val_;
+	String name_;
+};
+
+
+#endif
+
