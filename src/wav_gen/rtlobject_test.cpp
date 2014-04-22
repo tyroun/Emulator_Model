@@ -23,7 +23,10 @@ using namespace std;
 
 
 struct AlwaysModule{
-	AlwaysModule(ClkObject& clk){
+	AlwaysModule(ClkObject& clk):
+		A(RtlObject(String("test_a"))),
+		C(RtlObject(String("test_c")))
+	{
 		clk.addPosLoad(boost::bind(AlwaysModule::func,this));
 	}
 	//input 
@@ -47,22 +50,22 @@ struct AlwaysModule{
 	}
 };
 
-struct AssignModule{
-	AssignModule(){
-		A.addLoad(boost::bind(AssignModule::func,this));
-		B.addLoad(boost::bind(AssignModule::func,this));
-	}
-	//output
-	RtlObject D;
-	//input
-	RtlObjectPtr A;
-	RtlObjectPtr B;
-
-	void func()
-	{
-		D=A&(~B);
-	}
-};
+//struct AssignModule{
+//	AssignModule(){
+//		A.addLoad(boost::bind(AssignModule::func,this));
+//		B.addLoad(boost::bind(AssignModule::func,this));
+//	}
+//	//output
+//	RtlObject D;
+//	//input
+//	RtlObjectPtr A;
+//	RtlObjectPtr B;
+//
+//	void func()
+//	{
+//		D=A&(~B);
+//	}
+//};
 
 int main(int argc,char** argv)
 {
@@ -70,11 +73,12 @@ int main(int argc,char** argv)
 
 	ClkObject clk(string("test_clk"),100);
 	AlwaysModule md;
-	RtlObject B("test_b");
-	RtlObject reset("test_reset");
-	md.B=B.ptr;
-
-
+	RtlObjectPtr B(new RtlObject("test_b"));
+	RtlObjectPtr reset(new RtlObject("test_reset"));
+	md.B=B;
+	md.reset=reset;
+	clk.setReset(reset,Neg);
+	reset=1;
 
 	/*loop*/
 	while(1){

@@ -19,7 +19,7 @@
 #define __common_H__
 #include <string>
 
-typedef String std::string;
+typedef std::string String;
 
 typedef enum {Neg,Pos} LevelType;
 
