@@ -19,6 +19,7 @@
 
 RtlObject::RtlObject(String name){
 		shortName_=name;
+		p_ = this; 
 }
 
 void RtlObject::update(void)

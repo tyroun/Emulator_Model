@@ -72,6 +72,8 @@ struct AlwaysModule{
 int main(int argc,char** argv)
 {
 	int step=0;
+	
+	int cnt=atoi(argv[1]);
 
 	ClkObject clk(string("test_clk"),100);
 	AlwaysModule md(clk);
@@ -79,23 +81,27 @@ int main(int argc,char** argv)
 	RtlObjectPtr reset(new RtlObject("test_reset"));
 	md.B=B;
 	md.reset=reset;
-	clk.setReset(reset,Neg);
+	clk.setReset(reset,Pos);
 	*reset = true;
 	(*B)=true;
 
 	/*loop*/
-	while(1){
-		step++;
+	while(step<=cnt){
 		if(step==100)
 			*(md.reset)=false;
+		if(step==500)
+			*B=false;
 		clk.update(step);
 		if(0==(step%100)){
 			std::cout<<"step: "<<step<<std::endl;
+			std::cout<<"clk: "<<clk.getVal()<<std::endl;
 			std::cout<<"B: "<<B->getVal()<<std::endl;
 			std::cout<<"reset: "<<reset->getVal()<<std::endl;
 			std::cout<<"A: "<<md.A.getVal()<<std::endl;
 			std::cout<<"C: "<<md.C.getVal()<<std::endl;
+			std::cout<<"-------------------------------------------------------------------------"<<std::endl;
 		}
+		step++;
 	}
 }
 

@@ -28,6 +28,7 @@ class RtlObject;
 typedef boost::function<void()> ObjCallback;
 typedef boost::shared_ptr<RtlObject> RtlObjectPtr;
 
+template <typename T>
 class RtlObject 
 { 
   public:
@@ -38,13 +39,15 @@ class RtlObject
 
 	bool getVal(){return val_;}
 	
-	virtual bool operator=(bool val);
+	virtual T operator=(T val);
 	virtual void operator=(RtlObjectPtr& p){
 		val_=p->getVal();
 	}
+	virtual 
 
   protected:
-	bool val_;	
+	boost::shared_ptr<T> val_;
+	RtlObjectPtr p_;	
 	ObjCallback cb_;
 	String shortName_;//signal name
 };
