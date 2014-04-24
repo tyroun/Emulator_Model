@@ -34,22 +34,51 @@ class RtlObject
   public:
 	RtlObject(std::string name);
 	~RtlObject(){}
-	virtual void update(void);
-	void addLoad(ObjCallback cb){cb_=cb;}
+//	virtual void update(void);
+//	void addLoad(ObjCallback cb){cb_=cb;}
 
-	bool getVal(){return val_;}
-	
-	virtual T operator=(T val);
-	virtual void operator=(RtlObjectPtr& p){
-		val_=p->getVal();
+	boost::shared_ptr<T> getVal(){return val_;}
+	RtlObjectPtr getDrv(){
+		return pThis_;
+	}	
+
+	void setSensitve(){
+		isSensitive_=true;
 	}
-	virtual 
 
+	//Operator 	
+	virtual T operator=(T val){
+		if(val_!=val){
+			val_=val;
+			Loop::getInstance()->sendEvent(pThis);
+		}
+	}
+
+	virtual void operator=(RtlObjectPtr& p){
+	//	pDrv_=p;
+		if(val_!=p->getVal()){
+			val_=p->getVal();
+			Loop::getInstance()->sendEvent(pThis);
+		}
+
+	}
+
+	RtlObjectPtr operator & (){
+		return pThis_;
+	}	
+	bool operator == (const RtlObject& obj){
+		return val_==obj.getVal();
+	}
+	bool operator != (const RtlObject& obj){
+		return val_!=obj.getVal();
+	}
   protected:
-	boost::shared_ptr<T> val_;
-	RtlObjectPtr p_;	
-	ObjCallback cb_;
+	T val_;
+	RtlObjectPtr pThis_;	
+//	RtlObjectPtr pDrv_;	
+//	ObjCallback cb_;
 	String shortName_;//signal name
+	bool isSensitive_;
 };
 
 

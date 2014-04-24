@@ -19,16 +19,14 @@
 
 RtlObject::RtlObject(String name){
 		shortName_=name;
-		p_ = this; 
+		pThis_ = RtlObjectPtr(this);
+		isSensitive_=false;
 }
 
-void RtlObject::update(void)
-{
-	cb_();
-}
+//void RtlObject::update(void)
+//{
+//	cb_();
+//}
 
-bool RtlObject::operator=(bool val)
-{
-	val_=val;
-}
+
 
