@@ -17,7 +17,7 @@
  */
 #ifndef __common_H__
 #define __common_H__
-#include <string>
+#include <iostream>
 
 typedef std::string String;
 

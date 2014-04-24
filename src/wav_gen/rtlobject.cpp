@@ -15,7 +15,11 @@
  *
  * =====================================================================================
  */
-#include "rtlobject.h"
+#include "rtlobject.hpp"
+
+RtlObject::RtlObject(String name){
+		shortName_=name;
+}
 
 void RtlObject::update(void)
 {

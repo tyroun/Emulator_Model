@@ -1,10 +1,10 @@
 CUR_PATH=$(shell pwd)
-CXXCFLAGS=
+CXXCFLAGS=--save-temps
 LIBS=
 PROGS=rtlobject_test
 
 all:	$(PROGS)
-common =
+common = rtlobject.o
 
 rtlobject_test: $(common) rtlobject_test.o 
 	g++ -g $(CXXFLAGS) -o $@ $(common) rtlobject_test.o $(LIBS)
