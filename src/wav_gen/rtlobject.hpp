@@ -40,7 +40,7 @@ class RtlObject
 //	virtual void update(void);
 //	void addLoad(ObjCallback cb){cb_=cb;}
 
-	boost::shared_ptr<T> getVal(){return val_;}
+	T getVal(){return val_;}
 	RtlObjectPtr getDrv(){
 		return pThis_;
 	}	

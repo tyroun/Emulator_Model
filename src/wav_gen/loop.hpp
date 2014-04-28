@@ -17,7 +17,6 @@
  */
 #ifndef __loop_H__
 #define __loop_H__
-#include "rtlobject.hpp"
 #include "common.h"
 #include <map>
 #include <boost/function.hpp>
@@ -35,45 +34,17 @@ class Loop{
 		return instance;
 	}
 
-	void addEvent(RtlObjectPtr obj){
-		if(obj->isSensitive())
-			eventList.push_back(obj);
-	}
+	void addEvent(RtlObjectPtr obj);	
+	void eventLoop(void); //main loop
 	
-	void eventLoop(void) //main loop
-	{
-		init();
-		RtlObjectPtr objPtr;
-		while(1){
-			step++;
-			fn_(step);
-			//do method	
-			while(!eventList.empty()){
-				objPtr=eventList.front();
-				objPtr->update();		
-				eventlist.pop_front();
-			}
-		}
-	}
-
-	void setCallback(loopCallback fn){
-		fn_=fn;
-	}
-
+	void setCallback(loopCallback fn);
 	std::map<std::string,Module*> moduleList_;
   private:
 	Loop():
 		step(0)
 	{}
 
-	void init(){
-		std::map<std::string,Module*>::iterator it;
-		for(it=moduleList_.begin();it!=moduleList_.end();++it){
-			if((it->second)->method)
-				it->second->method();
-		}
-	}
-
+	void init();
 	std::list<RtlObjectPtr> eventList;
 	unsigned long long step;
 	loopCallback fn_;

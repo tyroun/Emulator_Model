@@ -97,8 +97,8 @@ private:
 	RtlObjectPtr p_;
 };
 
-typedef sc_input sc_port;
-typedef sc_output sc_port;
+typedef sc_port sc_input;
+typedef sc_port sc_output;
 
 #endif
 

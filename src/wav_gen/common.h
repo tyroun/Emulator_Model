@@ -24,7 +24,7 @@ typedef std::string String;
 
 typedef enum {Neg,Pos} LevelType;
 
-class RtlObject;
+template <typename T> class RtlObject;
 typedef boost::shared_ptr<RtlObject> RtlObjectPtr;
 
 #endif

@@ -20,6 +20,7 @@
 #define __module_H__
 #include "common.h"
 #include "rtlobject.hpp"
+#include "sc_port.hpp"
 #include <map>
 
 typedef boost::function<void()> moduleCallback;
@@ -27,7 +28,7 @@ typedef boost::function<void()> moduleCallback;
 
 class Module{
 public:
-	Module(std::string name,module* parent=0):
+	Module(std::string name,Module* parent=0):
 		name_(name),
 		parent_(parent)
 	{
