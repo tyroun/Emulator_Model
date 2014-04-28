@@ -19,19 +19,22 @@
 #define __rtlobject_H__
 #include "common.h"
 #include <list>
+#include "loop.hpp"
 #include <boost/function.hpp>
 #include <boost/bind.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
 //#include <boost/any.hpp>
-class RtlObject;
+
 typedef boost::function<void()> ObjCallback;
-typedef boost::shared_ptr<RtlObject> RtlObjectPtr;
+
+class Module;
 
 template <typename T>
 class RtlObject 
 { 
   public:
+	friend class sc_port;
 	RtlObject(std::string name);
 	~RtlObject(){}
 //	virtual void update(void);
@@ -42,30 +45,27 @@ class RtlObject
 		return pThis_;
 	}	
 
-	void setSensitve(){
-		isSensitive_=true;
+	void setSensitive(Module *md){
+		isSensitive=true;
+		moduleList.push_back(md);
+	}
+
+	bool isSensitive(){
+		return isSensitive;
+	}
+
+	void update(){
+		std::list<Module*>::iterator it;
+		for(it=moduleList.begin();it!=moduleList.end();++it){
+			(*it)->method();
+		}
 	}
 
 	//Operator 	
-	virtual T operator=(T val){
-		if(val_!=val){
-			val_=val;
-			Loop::getInstance()->sendEvent(pThis);
-		}
-	}
-
-	virtual void operator=(RtlObjectPtr& p){
-	//	pDrv_=p;
-		if(val_!=p->getVal()){
-			val_=p->getVal();
-			Loop::getInstance()->sendEvent(pThis);
-		}
-
-	}
-
 	RtlObjectPtr operator & (){
 		return pThis_;
 	}	
+	
 	bool operator == (const RtlObject& obj){
 		return val_==obj.getVal();
 	}
@@ -74,14 +74,13 @@ class RtlObject
 	}
   protected:
 	T val_;
-	RtlObjectPtr pThis_;	
+	RtlObjectPtr pThis_;
+	bool isSensitive;	
 //	RtlObjectPtr pDrv_;	
 //	ObjCallback cb_;
 	String shortName_;//signal name
-	bool isSensitive_;
+	std::list<Module*> moduleList;
 };
-
-
 
 
 

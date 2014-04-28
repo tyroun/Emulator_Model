@@ -25,21 +25,25 @@
 typedef boost::function<void()> moduleCallback;
 
 
-class module{
+class Module{
 public:
-	module(std::string name,module* parent=0):
+	Module(std::string name,module* parent=0):
 		name_(name),
 		parent_(parent)
 	{
-		init();	//all sun must call this init instead of consturt function
-		if(!sList.isEmpty()){
-			
-			Loop::getInstance()->registerEvent();
+		if(!parent){
+			//top module
+			Loop::getInstance()->moduleList_.insert(\
+					make_pair(name,this));	
+
 		}
+		init();	//all sun must call this init instead of consturt function
 	}
 
-	void registerMethod(void (*fn())){
-		Loop::getInstance()->registerMethod(fn,this);
+	
+
+	void sensitive(sc_port& obj){
+		obj.setSensitive(this);	
 	}
 
 protected:
@@ -48,8 +52,7 @@ protected:
 
 private:	
 	String name_;
-	std::list<RtlObjectPtr> sList_; //sensetive list 
-	module* parent_;
+	Module* parent_;
 };
 
 #endif

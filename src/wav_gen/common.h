@@ -18,12 +18,14 @@
 #ifndef __common_H__
 #define __common_H__
 #include <iostream>
+#include <boost/shared_ptr.hpp>
 
 typedef std::string String;
 
 typedef enum {Neg,Pos} LevelType;
 
-
+class RtlObject;
+typedef boost::shared_ptr<RtlObject> RtlObjectPtr;
 
 #endif
 
