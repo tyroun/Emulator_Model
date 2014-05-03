@@ -22,7 +22,7 @@
 template <typename T> 
 class sc_port{
 public:
-	sc_port(RtlObjectPtr p){
+	sc_port(RtlObjectPtr<T>::type p){
 		p_=p;
 	}	
 	sc_port(std::string name){
@@ -41,7 +41,7 @@ public:
 		}
 	}
 
-	RtlObjectPtr getPtr(){
+	RtlObjectPtr<T>::type getPtr(){
 		return p_;
 	}
 	
@@ -61,21 +61,21 @@ public:
 		}
 	}
 
-	void operator=(sc_port& port){
-		RtlObjectPtr p=port.getPtr();
+	void operator=(sc_port<T>& port){
+		RtlObjectPtr<T>::type p=port.getPtr();
 		if(p_->val_!=p->val_){
 			val_=p->val_;
 			Loop::getInstance()->addEvent(p_);
 		}
 	}
 
-	T operator+ (sc_port& port){
-		RtlObjectPtr p=port.getPtr();
+	T operator+ (sc_port<T>& port){
+		RtlObjectPtr<T>::type p=port.getPtr();
 		return val_+p->val_;
 	}	
 	
-	T operator- (sc_port& port){
-		RtlObjectPtr p=port.getPtr();
+	T operator- (sc_port<T>& port){
+		RtlObjectPtr<T>::type p=port.getPtr();
 		return val_-p->val_;
 	}	
 	
@@ -83,18 +83,18 @@ public:
 		return ~(p_->val_);
 	}	
 
-	bool operator == (const sc_port& port){
-		RtlObjectPtr p=port.getPtr();
+	bool operator == (const sc_port<T>& port){
+		RtlObjectPtr<T>::type p=port.getPtr();
 		return val_==p->val_;
 	}
-	bool operator != (const sc_port& port){
-		RtlObjectPtr p=port.getPtr();
+	bool operator != (const sc_port<T>& port){
+		RtlObjectPtr<T>::type p=port.getPtr();
 		return val_!=p->val_;
 
 	//Agorithm end 	
 
 private:
-	RtlObjectPtr p_;
+	RtlObjectPtr<T>::type p_;
 };
 
 typedef sc_port sc_input;

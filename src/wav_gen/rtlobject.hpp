@@ -41,7 +41,7 @@ class RtlObject
 //	void addLoad(ObjCallback cb){cb_=cb;}
 
 	T getVal(){return val_;}
-	RtlObjectPtr getDrv(){
+	RtlObjectPtr<T>::type getDrv(){
 		return pThis_;
 	}	
 
@@ -62,7 +62,7 @@ class RtlObject
 	}
 
 	//Operator 	
-	RtlObjectPtr operator & (){
+	RtlObjectPtr<T>::type operator & (){
 		return pThis_;
 	}	
 	
@@ -74,7 +74,7 @@ class RtlObject
 	}
   protected:
 	T val_;
-	RtlObjectPtr pThis_;
+	RtlObjectPtr<T>::type pThis_;
 	bool isSensitive;	
 //	RtlObjectPtr pDrv_;	
 //	ObjCallback cb_;
