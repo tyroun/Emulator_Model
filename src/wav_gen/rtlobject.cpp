@@ -17,11 +17,13 @@
  */
 #include "rtlobject.hpp"
 
-RtlObject::RtlObject(String name){
+template <typename T>
+RtlObject<T>::RtlObject(std::string& name){
 		shortName_=name;
-		pThis_ = RtlObjectPtr(this);
 		isSensitive_=false;
 }
+
+template RtlObject<bool>;
 
 //void RtlObject::update(void)
 //{

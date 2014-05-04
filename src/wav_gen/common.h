@@ -19,17 +19,18 @@
 #define __common_H__
 #include <iostream>
 #include <boost/shared_ptr.hpp>
+#include <string>
 
 typedef std::string String;
 
 typedef enum {Neg,Pos} LevelType;
 
 template <typename T> class RtlObject;
-template <typename T>
-struct RtlObjectPtr
-{
-	typedef boost::shared_ptr< RtlObject<T> > type;
-};
+//template <typename T>
+//struct RtlObjectPtr
+//{
+//	typedef boost::shared_ptr<RtlObject<T> > type;
+//};
 
 #endif
 

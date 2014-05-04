@@ -19,6 +19,7 @@
 #define __loop_H__
 #include "common.h"
 #include <map>
+#include <list>
 #include <boost/function.hpp>
 
 class Module;
@@ -34,19 +35,22 @@ class Loop{
 		return instance;
 	}
 
-	void addEvent(RtlObjectPtr obj);	
-	void eventLoop(void); //main loop
-	
-	void setCallback(loopCallback fn);
+	void addEvent(std::list<Module*> &moduleList);
+	void eventLoop(unsigned long long step); //main loop
+	void setCallback(loopCallback fn){
+		fn_=fn;
+	}
 	std::map<std::string,Module*> moduleList_;
   private:
 	Loop():
-		step(0)
-	{}
+		step_(0)
+	{	
+		eventList_.clear();
+	}
 
 	void init();
-	std::list<RtlObjectPtr> eventList;
-	unsigned long long step;
+	std::list<Module*> eventList_;
+	unsigned long long step_;
 	loopCallback fn_;
 };
 

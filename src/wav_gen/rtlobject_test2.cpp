@@ -30,14 +30,19 @@ public:
 	sc_output<bool>	C;
 	sc_output<bool> D;
 
-protected:
-	void init(){
-		C=sc_port("test_c");
-		D=sc_port("test_d");
+	MyModule(std::string name,Module* parent=0):
+		Module(name,parent),
+		C(std::string("test_c")),
+		D(std::string("test_d"))
+		//iD(std::string("test_d"))
+	{
+
 		sensitive(A);
 		sensitive(B);
 		sensitive(C);
 	}
+
+protected:
 
 	void method(){
 		C=A+B;
@@ -48,33 +53,35 @@ protected:
 
 void print_all(Module *md,unsigned long long step)
 {
+	MyModule *my_md=static_cast<MyModule*>(md);
 	std::cout<<"step= "<<step<<std::endl;
-	std::cout<<"A= "<<md.A.getVal()<<std::endl;
-	std::cout<<"B= "<<md.B.getVal()<<std::endl;
-	std::cout<<"C= "<<md.C.getVal()<<std::endl;
-	std::cout<<"D= "<<md.D.getVal()<<std::endl;
+	std::cout<<"A= "<<my_md->A.getVal()<<std::endl;
+	std::cout<<"B= "<<my_md->B.getVal()<<std::endl;
+	std::cout<<"C= "<<my_md->C.getVal()<<std::endl;
+	std::cout<<"D= "<<my_md->D.getVal()<<std::endl;
 }
 
 void loop_callback(unsigned long long step)
 {
-	Module *md=Loop::getInstance()->moduleList_[String("test_module")];	
+	Module *md=Loop::getInstance()->moduleList_[String("test_module")];
+	MyModule *my_md=static_cast<MyModule*>(md);
 	switch(step){
 	case 0:
-		printf_all(md,step);
+		print_all(md,step);
 		break;
 	case 1:
-		A=true;
-		B=false;
+		my_md->A=true;
+		my_md->B=false;
 		break;	
 	case 2:
-		printf_all(md,step);
+		print_all(md,step);
 		break;
 	case 3:
-		A=false;
-		B=false;
+		my_md->A=false;
+		my_md->B=false;
 		break;	
 	case 4:
-		printf_all(md,step);
+		print_all(md,step);
 		break;
 	case 5:
 		exit(0);
@@ -84,14 +91,14 @@ void loop_callback(unsigned long long step)
 int main(int argc,char** argv)
 {
 	Loop *loop=Loop::getInstance();
-	loop->setCallback(boost::bind(loop_callback,_1)(step));
-	sc_port<bool> A("test_a");
-	sc_port<bool> B("test_b");
+	loop->setCallback(boost::bind(loop_callback,_1));
+	sc_port<bool> A(std::string("test_a"));
+	sc_port<bool> B(std::string("test_b"));
 	A=false;
 	B=false;
-	MyModule md("test_module");	
+	MyModule md(std::string("test_module"));	
 	md.A.bind(A);
 	md.B.bind(B);
-	loop->eventLoop();	
+	loop->eventLoop(10);	
 }
 

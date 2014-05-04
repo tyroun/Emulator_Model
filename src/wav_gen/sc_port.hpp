@@ -18,30 +18,37 @@
 #ifndef __sc_port_H__
 #define __sc_port_H__
 #include "rtlobject.hpp"
+#include <iostream>
+#include <boost/make_shared.hpp>
 
 template <typename T> 
-class sc_port{
+class sc_port  
+{
 public:
-	sc_port(RtlObjectPtr<T>::type p){
-		p_=p;
+	typedef boost::shared_ptr<RtlObject<T> > RtlObjectPtr;  
+	sc_port(sc_port& port)
+	{
+		p_=port.getPtr();
 	}	
+
 	sc_port(std::string name){
-		p_=new RtlObject<T>(name);
+	//	p_=boost::make_shared<RtlObject<T> >(name);
+		p_=RtlObjectPtr(new RtlObject<T>(name)); 
 	}
 
 	sc_port(){
 	}	
 
 	void bind(sc_port port){
-		if(p_.isNull()){
-			p_=p;
+		if(!p_){
+			p_=port.getPtr();
 		}
 		else{
-			printf("bind error\n");
+			std::cout<<("bind error\n")<<std::endl;
 		}
 	}
 
-	RtlObjectPtr<T>::type getPtr(){
+	RtlObjectPtr getPtr(){
 		return p_;
 	}
 	
@@ -49,34 +56,34 @@ public:
 		return p_->val_;
 	}
 
-	void setSensitive(){
-		
+	void setSensitive(Module *md){
+		p_->setSensitive(md);	
 	}
 	//operation
 	//Agorithm start
 	void operator=(T val){
 		if(p_->val_!=val){
 			p_->val_=val;
-			Loop::getInstance()->addEvent(p_);
+			Loop::getInstance()->addEvent(p_->moduleList);
 		}
 	}
 
 	void operator=(sc_port<T>& port){
-		RtlObjectPtr<T>::type p=port.getPtr();
+		RtlObjectPtr p=port.getPtr();
 		if(p_->val_!=p->val_){
-			val_=p->val_;
-			Loop::getInstance()->addEvent(p_);
+			p_->val_=p->val_;
+			Loop::getInstance()->addEvent(p_->moduleList);
 		}
 	}
 
 	T operator+ (sc_port<T>& port){
-		RtlObjectPtr<T>::type p=port.getPtr();
-		return val_+p->val_;
+		RtlObjectPtr p=port.getPtr();
+		return p_->val_+p->val_;
 	}	
 	
 	T operator- (sc_port<T>& port){
-		RtlObjectPtr<T>::type p=port.getPtr();
-		return val_-p->val_;
+		RtlObjectPtr p=port.getPtr();
+		return p_->val_-p->val_;
 	}	
 	
 	T operator ~ (){
@@ -84,21 +91,21 @@ public:
 	}	
 
 	bool operator == (const sc_port<T>& port){
-		RtlObjectPtr<T>::type p=port.getPtr();
-		return val_==p->val_;
+		RtlObjectPtr p=port.getPtr();
+		return p_->val_==p->val_;
 	}
 	bool operator != (const sc_port<T>& port){
-		RtlObjectPtr<T>::type p=port.getPtr();
-		return val_!=p->val_;
-
+		RtlObjectPtr p=port.getPtr();
+		return p_->val_!=p->val_;
+	}
 	//Agorithm end 	
 
 private:
-	RtlObjectPtr<T>::type p_;
+	RtlObjectPtr p_;
 };
 
-typedef sc_port sc_input;
-typedef sc_port sc_output;
+#define sc_input sc_port 
+#define sc_output sc_port 
 
 #endif
 

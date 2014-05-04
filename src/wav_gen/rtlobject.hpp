@@ -34,48 +34,48 @@ template <typename T>
 class RtlObject 
 { 
   public:
-	friend class sc_port;
-	RtlObject(std::string name);
-	~RtlObject(){}
-//	virtual void update(void);
-//	void addLoad(ObjCallback cb){cb_=cb;}
+//	typedef boost::shared_ptr<RtlObject> RtlObjectPtr; 
+	template <typename T1> friend class sc_port;
+
+	RtlObject(std::string& name);
+	virtual ~RtlObject(){}
 
 	T getVal(){return val_;}
-	RtlObjectPtr<T>::type getDrv(){
-		return pThis_;
-	}	
+//	RtlObjectPtr getDrv(){
+//		return pThis_;
+//	}	
 
 	void setSensitive(Module *md){
-		isSensitive=true;
+		isSensitive_=true;
 		moduleList.push_back(md);
 	}
 
 	bool isSensitive(){
-		return isSensitive;
+		return isSensitive_;
 	}
 
-	void update(){
-		std::list<Module*>::iterator it;
-		for(it=moduleList.begin();it!=moduleList.end();++it){
-			(*it)->method();
-		}
-	}
+//	void update(){
+//		std::list<Module*>::iterator it;
+//		for(it=moduleList.begin();it!=moduleList.end();++it){
+//			(*it)->method();
+//		}
+//	}
 
 	//Operator 	
-	RtlObjectPtr<T>::type operator & (){
-		return pThis_;
-	}	
+//	RtlObjectPtr operator & (){
+//		return pThis_;
+//	}	
 	
-	bool operator == (const RtlObject& obj){
-		return val_==obj.getVal();
-	}
-	bool operator != (const RtlObject& obj){
-		return val_!=obj.getVal();
-	}
+	//bool operator == (const RtlObject& obj){
+	//	return val_==obj.getVal();
+	//}
+	//bool operator != (const RtlObject& obj){
+	//	return val_!=obj.getVal();
+	//}
   protected:
 	T val_;
-	RtlObjectPtr<T>::type pThis_;
-	bool isSensitive;	
+//	RtlObjectPtr pThis_;
+	bool isSensitive_;	
 //	RtlObjectPtr pDrv_;	
 //	ObjCallback cb_;
 	String shortName_;//signal name

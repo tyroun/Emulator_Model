@@ -28,7 +28,7 @@ typedef boost::function<void()> moduleCallback;
 
 class Module{
 public:
-	Module(std::string name,Module* parent=0):
+	Module(std::string& name,Module* parent=0):
 		name_(name),
 		parent_(parent)
 	{
@@ -38,18 +38,15 @@ public:
 					make_pair(name,this));	
 
 		}
-		init();	//all sun must call this init instead of consturt function
 	}
 
 	
-
-	void sensitive(sc_port& obj){
+	template <typename T>
+	void sensitive(sc_port<T>& obj){
 		obj.setSensitive(this);	
 	}
 
-protected:
 	virtual void method()=0;
-	virtual void init()=0;
 
 private:	
 	String name_;
