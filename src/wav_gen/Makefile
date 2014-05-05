@@ -4,7 +4,7 @@ LIBS=
 PROGS=rtlobject_test2
 
 all:	$(PROGS)
-common = rtlobject.o loop.o
+common = loop.o
 
 rtlobject_test2: $(common) rtlobject_test2.o 
 	g++ -g $(CXXFLAGS) -o $@ $(common) rtlobject_test2.o $(LIBS)

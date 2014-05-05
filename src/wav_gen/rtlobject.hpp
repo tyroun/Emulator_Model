@@ -37,7 +37,10 @@ class RtlObject
 //	typedef boost::shared_ptr<RtlObject> RtlObjectPtr; 
 	template <typename T1> friend class sc_port;
 
-	RtlObject(std::string& name);
+	RtlObject(std::string& name){
+		shortName_=name;
+		isSensitive_=false;
+	}
 	virtual ~RtlObject(){}
 
 	T getVal(){return val_;}
