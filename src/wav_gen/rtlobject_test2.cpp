@@ -34,9 +34,10 @@ public:
 		Module(name,parent),
 		C(std::string("test_c")),
 		D(std::string("test_d"))
-		//iD(std::string("test_d"))
 	{
+	}
 
+	void init(){
 		sensitive(A);
 		sensitive(B);
 		sensitive(C);
@@ -63,7 +64,7 @@ void print_all(Module *md,unsigned long long step)
 
 void loop_callback(unsigned long long step)
 {
-	Module *md=Loop::getInstance()->moduleList_[String("test_module")];
+	Module *md=Loop::getInstance()->moduleMap_[String("test_module")];
 	MyModule *my_md=static_cast<MyModule*>(md);
 	switch(step){
 	case 0:
@@ -72,6 +73,7 @@ void loop_callback(unsigned long long step)
 	case 1:
 		my_md->A=true;
 		my_md->B=false;
+		print_all(md,step);
 		break;	
 	case 2:
 		print_all(md,step);
@@ -79,6 +81,7 @@ void loop_callback(unsigned long long step)
 	case 3:
 		my_md->A=false;
 		my_md->B=false;
+		print_all(md,step);
 		break;	
 	case 4:
 		print_all(md,step);

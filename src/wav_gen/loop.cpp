@@ -31,9 +31,14 @@ void Loop::addEvent(std::list<Module*> &moduleList)
 
 void Loop::eventLoop(unsigned long long step)
 {
+	std::map<std::string,Module*>::iterator itMd;
+	for(itMd=moduleMap_.begin();itMd!=moduleMap_.end();++itMd){
+		itMd->second->init();
+	}
+	
 	while(1){
+		fn_(step_);
 		step_++;
-		fn_(step);
 
 		//do method
 		std::list<Module*>::iterator it;

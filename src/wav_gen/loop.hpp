@@ -40,7 +40,7 @@ class Loop{
 	void setCallback(loopCallback fn){
 		fn_=fn;
 	}
-	std::map<std::string,Module*> moduleList_;
+	std::map<std::string,Module*> moduleMap_;
   private:
 	Loop():
 		step_(0)

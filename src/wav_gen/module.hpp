@@ -34,7 +34,7 @@ public:
 	{
 		if(!parent){
 			//top module
-			Loop::getInstance()->moduleList_.insert(\
+			Loop::getInstance()->moduleMap_.insert(\
 					make_pair(name,this));	
 
 		}
@@ -47,6 +47,7 @@ public:
 	}
 
 	virtual void method()=0;
+	virtual void init()=0;
 
 private:	
 	String name_;

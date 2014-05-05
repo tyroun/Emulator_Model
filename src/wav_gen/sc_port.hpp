@@ -32,7 +32,6 @@ public:
 	}	
 
 	sc_port(std::string name){
-	//	p_=boost::make_shared<RtlObject<T> >(name);
 		p_=RtlObjectPtr(new RtlObject<T>(name)); 
 	}
 
@@ -40,7 +39,7 @@ public:
 	}	
 
 	void bind(sc_port port){
-		if(!p_){
+		if(!p_.get()){
 			p_=port.getPtr();
 		}
 		else{
